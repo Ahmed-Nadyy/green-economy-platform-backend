@@ -2,40 +2,58 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const JobRequest = sequelize.define("JobRequest", {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  fullName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
     },
-    fullName: {
-        type: DataTypes.STRING,
-        allowNull: true,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: true,
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
     },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: true,
+  },
+  phoneNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      is: {
+        args: /^(\+20|0)?1[0125][0-9]{8}$/,
+        msg: "Please enter a valid Egyptian phone number",
+      },
     },
-    role: {
-        type: DataTypes.STRING,
-        allowNull: true,
+  },
+  qualification: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
     },
-    phoneNumber: {
-        type: DataTypes.NUMBER,
-        allowNull: true,
+  },
+  experience: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
     },
-    qualification: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    experience: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    }
+  },
 });
 
 module.exports = JobRequest;
