@@ -10,24 +10,40 @@ const Admin = sequelize.define("Admin", {
   },
   fullName: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   job: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   phoneNumber: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: DataTypes.STRING,
     allowNull: true,
-  }
+  },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  lastLoginAttempt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 });
 
 module.exports = Admin;
