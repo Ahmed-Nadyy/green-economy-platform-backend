@@ -15,7 +15,7 @@ const sendOTPEmail = async (email, otp, type) => {
   const html = `
     <h1>${subject}</h1>
     <p>Your OTP is: <strong>${otp}</strong></p>
-    <p>This OTP will expire in 5 minutes.</p>
+    <p>This OTP will expire in 10 minutes.</p>
   `;
 
   try {

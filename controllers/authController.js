@@ -6,54 +6,68 @@ const Admin = require("../models/AdminModel");
 const { generateOTP, storeOTP, verifyOTP } = require("../utils/otpService");
 const { sendOTPEmail } = require("../utils/emailService");
 
-// Register new admin
 const register = async (req, res) => {
+  let imagePath = null;
   try {
-    const { fullName, email, password, job, phoneNumber } = req.body;
+    const { fullName, email, password, confirmPassword, job, phoneNumber } =
+      req.body;
     const imageFile = req.file;
 
-    // Check if admin already exists
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Password and confirm password do not match",
+      });
+    }
+
     const existingAdmin = await Admin.findOne({ where: { email } });
     if (existingAdmin) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Handle image upload
-    let imageUrl = null;
     if (imageFile) {
       const uploadDir = path.join(__dirname, "../uploads");
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
       const fileName = `${Date.now()}-${imageFile.originalname}`;
-      const filePath = path.join(uploadDir, fileName);
-      fs.writeFileSync(filePath, imageFile.buffer);
-      imageUrl = `/uploads/${fileName}`;
+      imagePath = path.join(uploadDir, fileName);
+      fs.writeFileSync(imagePath, imageFile.buffer);
     }
 
-    // Create admin
     const admin = await Admin.create({
       fullName,
       email,
       password: hashedPassword,
       job,
       phoneNumber,
-      imageUrl,
+      imageUrl: imagePath ? `/uploads/${path.basename(imagePath)}` : null,
     });
-
-    // Generate and send OTP
     const otp = generateOTP();
-    storeOTP(email, otp, "register");
-    await sendOTPEmail(email, otp, "register");
+    await storeOTP(email, otp, "register");
+    const emailSent = await sendOTPEmail(email, otp, "register");
+
+    if (!emailSent) {
+      // If email sending fails, delete the created admin and image
+      await admin.destroy();
+      if (imagePath && fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+      return res
+        .status(500)
+        .json({ message: "Failed to send verification email" });
+    }
 
     res.status(201).json({
       message: "Registration successful. Please verify your email.",
       adminId: admin.id,
     });
   } catch (error) {
+    // Clean up image if registration fails
+    if (imagePath && fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+    }
     console.error("Registration error:", error);
     res.status(500).json({ message: "Registration failed" });
   }
@@ -73,7 +87,7 @@ const verifyRegistration = async (req, res) => {
       return res.status(400).json({ message: "Account already verified" });
     }
 
-    const isValid = verifyOTP(email, otp, "register");
+    const isValid = await verifyOTP(email, otp, "register");
     if (!isValid) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
@@ -109,10 +123,13 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate and send OTP
     const otp = generateOTP();
-    storeOTP(email, otp, "login");
-    await sendOTPEmail(email, otp, "login");
+    await storeOTP(email, otp, "login");
+    const emailSent = await sendOTPEmail(email, otp, "login");
+
+    if (!emailSent) {
+      return res.status(500).json({ message: "Failed to send OTP email" });
+    }
 
     admin.lastLoginAttempt = new Date();
     await admin.save();
@@ -134,7 +151,7 @@ const verifyLogin = async (req, res) => {
       return res.status(404).json({ message: "Admin not found" });
     }
 
-    const isValid = verifyOTP(email, otp, "login");
+    const isValid = await verifyOTP(email, otp, "login");
     if (!isValid) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
@@ -174,8 +191,12 @@ const resendOTP = async (req, res) => {
     }
 
     const otp = generateOTP();
-    storeOTP(email, otp, type);
-    await sendOTPEmail(email, otp, type);
+    await storeOTP(email, otp, type);
+    const emailSent = await sendOTPEmail(email, otp, type);
+
+    if (!emailSent) {
+      return res.status(500).json({ message: "Failed to send OTP email" });
+    }
 
     res.json({ message: "OTP resent successfully" });
   } catch (error) {

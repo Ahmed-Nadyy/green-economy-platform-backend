@@ -1,38 +1,62 @@
 const crypto = require("crypto");
-
-const otpStore = new Map();
+const Otp = require("../models/OtpModel");
+const { Op } = require("sequelize");
 
 const generateOTP = () => {
   return crypto.randomInt(100000, 999999).toString();
 };
 
-const storeOTP = (email, otp, type) => {
-  const key = `${email}-${type}`;
-  otpStore.set(key, {
-    otp,
-    expiresAt: Date.now() + 10 * 60 * 1000, // 5 minutes
-  });
+const storeOTP = async (email, otp, type) => {
+  try {
+    // Delete any existing OTP for this email and type
+    await Otp.destroy({
+      where: {
+        email,
+        type,
+      },
+    });
+
+    await Otp.create({
+      email,
+      otp,
+      type,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000), 
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error storing OTP:", error);
+    return false;
+  }
 };
 
-const verifyOTP = (email, otp, type) => {
-  const key = `${email}-${type}`;
-  const storedData = otpStore.get(key);
+const verifyOTP = async (email, otp, type) => {
+  try {
+    const otpRecord = await Otp.findOne({
+      where: {
+        email,
+        type,
+        isUsed: false,
+        expiresAt: {
+          [Op.gt]: new Date(), 
+        },
+      },
+    });
 
-  if (!storedData) {
+    if (!otpRecord) {
+      return false;
+    }
+
+    if (otpRecord.otp === otp) {
+      await otpRecord.update({ isUsed: true });
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
     return false;
   }
-
-  if (Date.now() > storedData.expiresAt) {
-    otpStore.delete(key);
-    return false;
-  }
-
-  if (storedData.otp === otp) {
-    otpStore.delete(key);
-    return true;
-  }
-
-  return false;
 };
 
 module.exports = {
