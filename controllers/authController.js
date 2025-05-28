@@ -19,6 +19,21 @@ const register = async (req, res) => {
       });
     }
 
+    const phoneRegex = /^(\+20|0)?1[0125][0-9]{8}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      return res.status(400).json({
+        message: "Please enter a valid Egyptian phone number",
+        details:
+          "Phone number should start with +20 or 0 followed by 1, 0, 1, 2, or 5 and 8 digits",
+      });
+    }
+
+    const formattedPhone = phoneNumber.startsWith("+20")
+      ? phoneNumber
+      : phoneNumber.startsWith("0")
+      ? "+20" + phoneNumber.slice(1)
+      : "+20" + phoneNumber;
+
     const existingAdmin = await Admin.findOne({ where: { email } });
     if (existingAdmin) {
       return res.status(400).json({ message: "Email already registered" });
@@ -41,7 +56,7 @@ const register = async (req, res) => {
       email,
       password: hashedPassword,
       job,
-      phoneNumber,
+      phoneNumber: formattedPhone,
       imageUrl: imagePath ? `/uploads/${path.basename(imagePath)}` : null,
     });
     const otp = generateOTP();
@@ -69,6 +84,15 @@ const register = async (req, res) => {
       fs.unlinkSync(imagePath);
     }
     console.error("Registration error:", error);
+
+    // Handle validation errors
+    if (error.name === "SequelizeValidationError") {
+      return res.status(400).json({
+        message: "Validation error",
+        details: error.errors.map((err) => err.message),
+      });
+    }
+
     res.status(500).json({ message: "Registration failed" });
   }
 };

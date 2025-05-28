@@ -21,7 +21,7 @@ const getAdminById = async (req, res) => {
   try {
     const { id } = req.params;
     const admin = await Admin.findByPk(id, {
-      attributes: { exclude: ["password"] }, // Exclude password from response
+      attributes: { exclude: ["password"] },
     });
 
     if (!admin) {
@@ -48,6 +48,43 @@ const updateAdmin = async (req, res) => {
       return res.status(404).json({ message: "Admin not found" });
     }
 
+    // Validate phone number if provided
+    if (phoneNumber) {
+      const phoneRegex = /^(\+20|0)?1[0125][0-9]{8}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+        return res.status(400).json({
+          message: "Please enter a valid Egyptian phone number",
+          details:
+            "Phone number should start with +20 or 0 followed by 1, 0, 1, 2, or 5 and 8 digits",
+        });
+      }
+
+      // Format phone number to standard format (+20XXXXXXXXXX)
+      const formattedPhone = phoneNumber.startsWith("+20")
+        ? phoneNumber
+        : phoneNumber.startsWith("0")
+        ? "+20" + phoneNumber.slice(1)
+        : "+20" + phoneNumber;
+
+      // Update admin data
+      const updateData = {
+        fullName: fullName || admin.fullName,
+        email: email || admin.email,
+        job: job || admin.job,
+        phoneNumber: formattedPhone,
+        imageUrl: imagePath
+          ? `/uploads/${path.basename(imagePath)}`
+          : admin.imageUrl,
+      };
+
+      // Update password if provided
+      if (password) {
+        updateData.password = await bcrypt.hash(password, 10);
+      }
+
+      await admin.update(updateData);
+    }
+
     // Handle image upload if new image is provided
     if (imageFile) {
       // Delete old image if exists
@@ -68,24 +105,6 @@ const updateAdmin = async (req, res) => {
       fs.writeFileSync(imagePath, imageFile.buffer);
     }
 
-    // Update admin data
-    const updateData = {
-      fullName: fullName || admin.fullName,
-      email: email || admin.email,
-      job: job || admin.job,
-      phoneNumber: phoneNumber || admin.phoneNumber,
-      imageUrl: imagePath
-        ? `/uploads/${path.basename(imagePath)}`
-        : admin.imageUrl,
-    };
-
-    // Update password if provided
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
-    await admin.update(updateData);
-
     res.json({
       message: "Admin updated successfully",
       admin: {
@@ -103,6 +122,15 @@ const updateAdmin = async (req, res) => {
       fs.unlinkSync(imagePath);
     }
     console.error("Error updating admin:", error);
+
+    // Handle validation errors
+    if (error.name === "SequelizeValidationError") {
+      return res.status(400).json({
+        message: "Validation error",
+        details: error.errors.map((err) => err.message),
+      });
+    }
+
     res.status(500).json({ message: "Failed to update admin" });
   }
 };

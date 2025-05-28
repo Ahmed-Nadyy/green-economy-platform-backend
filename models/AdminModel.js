@@ -31,6 +31,12 @@ const Admin = sequelize.define("Admin", {
   phoneNumber: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      is: {
+        args: /^(\+20|0)?1[0125][0-9]{8}$/, // Egyptian phone number format
+        msg: "Please enter a valid Egyptian phone number",
+      },
+    },
   },
   imageUrl: {
     type: DataTypes.STRING,
