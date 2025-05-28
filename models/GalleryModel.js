@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Galary = sequelize.define("Galary", {
+const Gallery = sequelize.define("Gallery", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -10,12 +10,12 @@ const Galary = sequelize.define("Galary", {
   },
   url: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   type: {
-    type: DataTypes.ENUM('image', 'video'),
+    type: DataTypes.ENUM("image", "video"),
     allowNull: false,
-  }
+  },
 });
 
-module.exports = Galary;
+module.exports = Gallery;

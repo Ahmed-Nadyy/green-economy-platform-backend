@@ -28,6 +28,10 @@ app.use("/api/admins", adminRoutes);
 const jobRequestRoutes = require("./routes/jobRequestRoutes");
 app.use("/api/job-requests", jobRequestRoutes);
 
+// Gallery routes
+const galleryRoutes = require("./routes/galleryRoutes");
+app.use("/api/gallery", galleryRoutes);
+
 // Example: user routes
 // const userRoutes = require('./routes/user.routes');
 // app.use('/api/users', userRoutes);
