@@ -52,10 +52,7 @@ const upload = multer({
     } else {
       cb(new Error("Invalid file type. Only images and videos are allowed."));
     }
-  },
-  limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB limit
-  },
+  }
 });
 
 // Gallery routes

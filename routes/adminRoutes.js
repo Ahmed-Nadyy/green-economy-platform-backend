@@ -24,7 +24,6 @@ const upload = multer({
   },
 });
 
-// Admin management routes
 router.get("/", getAllAdmins);
 router.get("/:id", getAdminById);
 router.patch("/:id", upload.single("image"), updateAdmin);
