@@ -1,5 +1,16 @@
 const Article = require("../models/ArticleModel");
 const path = require("path");
+const fs = require("fs");
+
+// Helper function to delete image file
+const deleteImageFile = (imageUrl) => {
+  if (imageUrl) {
+    const imagePath = path.join(__dirname, "..", imageUrl);
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+    }
+  }
+};
 
 // Create a new article
 const createArticle = async (req, res) => {
@@ -8,12 +19,16 @@ const createArticle = async (req, res) => {
 
     // Handle image upload
     if (req.file) {
-      articleData.imageUrl = `/uploads/images/${req.file.filename}`;
+      articleData.imageUrl = `/uploads/article/${req.file.filename}`;
     }
 
     const article = await Article.create(articleData);
     res.status(201).json(article);
   } catch (error) {
+    // If article creation fails, delete the uploaded image
+    if (req.file) {
+      deleteImageFile(`/uploads/article/${req.file.filename}`);
+    }
     res.status(400).json({ message: error.message });
   }
 };
@@ -30,12 +45,18 @@ const updateArticle = async (req, res) => {
 
     // Handle image upload
     if (req.file) {
-      updateData.imageUrl = `/uploads/images/${req.file.filename}`;
+      // Delete old image if it exists
+      deleteImageFile(article.imageUrl);
+      updateData.imageUrl = `/uploads/article/${req.file.filename}`;
     }
 
     await article.update(updateData);
     res.json(article);
   } catch (error) {
+    // If update fails, delete the newly uploaded image
+    if (req.file) {
+      deleteImageFile(`/uploads/article/${req.file.filename}`);
+    }
     res.status(400).json({ message: error.message });
   }
 };
@@ -73,6 +94,10 @@ const deleteArticle = async (req, res) => {
     if (!article) {
       return res.status(404).json({ message: "Article not found" });
     }
+
+    // Delete the image file before deleting the article
+    deleteImageFile(article.imageUrl);
+
     await article.destroy();
     res.json({ message: "Article deleted successfully" });
   } catch (error) {
