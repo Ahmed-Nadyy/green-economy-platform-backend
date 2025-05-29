@@ -32,6 +32,10 @@ app.use("/api/job-requests", jobRequestRoutes);
 const galleryRoutes = require("./routes/galleryRoutes");
 app.use("/api/gallery", galleryRoutes);
 
+// Article routes
+const articleRoutes = require("./routes/articleRoutes");
+app.use("/api/articles", articleRoutes);
+
 // Example: user routes
 // const userRoutes = require('./routes/user.routes');
 // app.use('/api/users', userRoutes);
