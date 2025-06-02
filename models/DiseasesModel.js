@@ -23,8 +23,7 @@ const Diseases = sequelize.define("Diseases", {
     arabicPreventionMethod: {
         type: DataTypes.STRING,
         allowNull: true,
-    }
-    
+    }    
 });
 
 module.exports = Diseases;

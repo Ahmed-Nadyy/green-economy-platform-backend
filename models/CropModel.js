@@ -55,10 +55,4 @@ const Crop = sequelize.define("Crop", {
 }
 );
 
-//  Crop.associate = (models) => {
-//     Crop.hasOne(models.Cultivation);
-//     Crop.hasOne(models.Diseases);
-//     // other associations...
-//   };
-
 module.exports = Crop;

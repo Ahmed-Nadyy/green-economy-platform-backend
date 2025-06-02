@@ -27,7 +27,7 @@ const Economics = sequelize.define("Economics", {
         }
     },
     averageNetProfit: {
-        type: DataTypes.Number,
+        type: DataTypes.NUMBER,
         allowNull: false,
         validate: {
             min: 0
