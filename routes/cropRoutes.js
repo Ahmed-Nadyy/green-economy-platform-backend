@@ -3,16 +3,19 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+
 const {
-  createGalleryItem,
-  getAllGalleryItems,
-  deleteGalleryItem,
-} = require("../controllers/galleryController");
+  createCrop,
+  updateCrop,
+  getCropById,
+  getAllCrops,
+  deleteCrop,
+} = require("../controllers/cropController");
 
 // Ensure upload directories exist
 const createUploadDirs = () => {
   const dirs = [
-    path.join(__dirname, "../uploads/crop"),
+    path.join(__dirname, "../uploads/gallery"),
     path.join(__dirname, "../uploads/profileImages"),
   ];
 
@@ -28,7 +31,7 @@ createUploadDirs();
 // Configure multer for file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, "../uploads/gallery");
+    const uploadDir = path.join(__dirname, "../uploads/crop");
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
@@ -55,9 +58,14 @@ const upload = multer({
   }
 });
 
-// Gallery routes
-router.post("/", upload.single("file"), createGalleryItem);
-router.get("/", getAllGalleryItems);
-router.delete("/:id", deleteGalleryItem);
+router.post("/", upload.single("image"), createCrop);
+
+router.patch("/:id", upload.single("image"), updateCrop);
+
+router.get("/:id", getCropById);
+
+router.get("/", getAllCrops);
+
+router.delete("/:id", deleteCrop);
 
 module.exports = router;

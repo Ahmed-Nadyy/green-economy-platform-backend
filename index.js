@@ -32,6 +32,10 @@ app.use("/api/job-requests", jobRequestRoutes);
 const galleryRoutes = require("./routes/galleryRoutes");
 app.use("/api/gallery", galleryRoutes);
 
+// Crop routes
+const cropRoutes = require("./routes/cropRoutes");
+app.use("/api/crops", cropRoutes);
+
 // Article routes
 const articleRoutes = require("./routes/articleRoutes");
 app.use("/api/articles", articleRoutes);

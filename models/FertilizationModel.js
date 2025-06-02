@@ -7,6 +7,22 @@ const Fertilization = sequelize.define("Fertilization", {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
+    },
+    fertilizerTypes: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    arabicFertilizerTypes: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    fertilizationInstructions: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    arabicFertilizationInstructions: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
 });
 

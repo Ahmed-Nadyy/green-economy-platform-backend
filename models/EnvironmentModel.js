@@ -7,7 +7,31 @@ const Environment = sequelize.define("Environment", {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
-    }
+    },
+    toleranceToSalinity: {
+        type : DataTypes.STRING,
+        allowNull: true,
+    },
+    arabicToleranceToSalinity: {
+        type : DataTypes.STRING,
+        allowNull: true,
+    },
+    requiredHumidityPercentage: {
+        type : DataTypes.NUMBER,
+        allowNull: true,
+    },
+    suitableSolidType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    arabicSuitableSolidType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    appropriateTemperatureForFarming: {
+        type: DataTypes.NUMBER,
+        allowNull: true,
+    },
 });
 
 module.exports = Environment;

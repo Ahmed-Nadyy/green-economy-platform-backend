@@ -8,26 +8,57 @@ const Crop = sequelize.define("Crop", {
         allowNull: false,
         primaryKey: true,
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    arabicName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     type: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+    },
+    arabicType: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     imageUrl: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     season: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+    },
+    arabicSeason: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     description: {
-        type: DataTypes.NUMBER,
-        allowNull: true,
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     arabicDescription: {
         type: DataTypes.STRING,
-        allowNull: true,
-    }
-});
+        allowNull: false,
+    },
+    growthPeriod: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    arabicGrowthPeriod: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+}
+);
+
+//  Crop.associate = (models) => {
+//     Crop.hasOne(models.Cultivation);
+//     Crop.hasOne(models.Diseases);
+//     // other associations...
+//   };
 
 module.exports = Crop;

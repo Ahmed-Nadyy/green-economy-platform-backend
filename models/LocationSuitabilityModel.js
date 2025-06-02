@@ -7,7 +7,32 @@ const LocationSuitability = sequelize.define("LocationSuitability", {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
+    },
+    highestProductionAreas: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    arabicHighestProductionAreas: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    plantedInOldLand: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    arabicPlantedInOldLand: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    suitableForDesert: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    arabicSuitableForDesert: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
+
 });
 
 module.exports = LocationSuitability;
