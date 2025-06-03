@@ -12,22 +12,6 @@ const {
   deleteCrop,
 } = require("../controllers/cropController");
 
-// Ensure upload directories exist
-const createUploadDirs = () => {
-  const dirs = [
-    path.join(__dirname, "../uploads/gallery"),
-    path.join(__dirname, "../uploads/profileImages"),
-  ];
-
-  dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-  });
-};
-
-createUploadDirs();
-
 // Configure multer for file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
