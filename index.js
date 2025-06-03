@@ -3,6 +3,9 @@ const dotenv = require("dotenv");
 const path = require("path");
 const sequelize = require("./config/database");
 
+// Import models
+const models = require("./models");
+
 dotenv.config();
 
 const app = express();
@@ -55,6 +58,13 @@ app.use((err, req, res, next) => {
 
 // Database sync
 const PORT = process.env.PORT || 5000;
+
+// Set up model associations
+Object.keys(models).forEach((modelName) => {
+  if (models[modelName].associate) {
+    models[modelName].associate(models);
+  }
+});
 
 sequelize
   .sync({ alter: true })

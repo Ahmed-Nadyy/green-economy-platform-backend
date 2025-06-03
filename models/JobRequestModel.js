@@ -10,49 +10,31 @@ const JobRequest = sequelize.define("JobRequest", {
   },
   fullName: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
+    allowNull: true,
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
+    allowNull: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   role: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
+    allowNull: true,
   },
   phoneNumber: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      is: {
-        args: /^(\+20|0)?1[0125][0-9]{8}$/,
-        msg: "Please enter a valid Egyptian phone number",
-      },
-    },
+    allowNull: true,
   },
   qualification: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
+    allowNull: true,
   },
   experience: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
+    allowNull: true,
   },
 });
 
