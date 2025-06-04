@@ -11,20 +11,69 @@ const Fertilization = require("./FertilizationModel");
 const Irrigation = require("./IrrigationModel");
 const LocationSuitability = require("./LocationSuitabilityModel");
 
-Crop.hasOne(Cultivation);
-Cultivation.belongsTo(Crop);
-Crop.hasOne(Diseases);
-Diseases.belongsTo(Crop);
-Crop.hasOne(Economics);
-Economics.belongsTo(Crop);
-Crop.hasOne(Environment);
-Environment.belongsTo(Crop);
-Crop.hasOne(Fertilization);
-Fertilization.belongsTo(Crop);
-Crop.hasOne(Irrigation);
-Irrigation.belongsTo(Crop);
-Crop.hasOne(LocationSuitability);
-LocationSuitability.belongsTo(Crop);
+// Crop belongsTo Cultivation (Crop has cultivationId)
+Crop.belongsTo(Cultivation, { 
+  foreignKey: 'cultivationId',
+  as: 'cultivation'
+});
+Cultivation.hasOne(Crop, {
+  foreignKey: 'cultivationId',
+  as: 'crop'
+});
+
+Crop.belongsTo(Diseases, { 
+  foreignKey: 'diseasesId',
+  as: 'diseases'
+});
+Diseases.hasOne(Crop, {
+  foreignKey: 'diseasesId',
+  as: 'crop'
+});
+
+Crop.belongsTo(Economics, { 
+  foreignKey: 'economicsId',
+  as: 'economics'
+});
+Economics.hasOne(Crop, {
+  foreignKey: 'economicsId',
+  as: 'crop'
+});
+
+Crop.belongsTo(Environment, { 
+  foreignKey: 'environmentId',
+  as: 'environment'
+});
+Environment.hasOne(Crop, {
+  foreignKey: 'environmentId',
+  as: 'crop'
+});
+
+Crop.belongsTo(Fertilization, { 
+  foreignKey: 'fertilizationId',
+  as: 'fertilization'
+});
+Fertilization.hasOne(Crop, {
+  foreignKey: 'fertilizationId',
+  as: 'crop'
+});
+
+Crop.belongsTo(Irrigation, { 
+  foreignKey: 'irrigationId',
+  as: 'irrigation'
+});
+Irrigation.hasOne(Crop, {
+  foreignKey: 'irrigationId',
+  as: 'crop'
+});
+
+Crop.belongsTo(LocationSuitability, { 
+  foreignKey: 'locationSuitabilityId',
+  as: 'locationSuitability'
+});
+LocationSuitability.hasOne(Crop, {
+  foreignKey: 'locationSuitabilityId',
+  as: 'crop'
+});
 
 module.exports = {
   Admin,

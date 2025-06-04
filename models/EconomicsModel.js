@@ -15,7 +15,7 @@ const Economics = sequelize.define("Economics", {
       min: 0,
     },
   },
-  AverageProductivity: {
+  averageProductivity: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: true,
   },

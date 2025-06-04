@@ -60,18 +60,20 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 // Set up model associations
-Object.keys(models).forEach((modelName) => {
-  if (models[modelName].associate) {
-    models[modelName].associate(models);
-  }
-});
+// Object.keys(models).forEach((modelName) => {
+//   if (models[modelName].associate) {
+//     models[modelName].associate(models);
+//   }
+// });
 
 sequelize
   .sync({ alter: true })
-  // .sync({ force: true })
   .then(() => {
+    console.log("Sequelize sync completed");
     app.listen(PORT, () => {
-      console.log(`The Server is running on http://localhost:${PORT}`);
+      console.log(`Server is running on http://localhost:${PORT}`);
     });
   })
-  .catch((err) => console.log(err));
+  .catch((err) => {
+    console.error("Sequelize sync failed:", err);
+  });

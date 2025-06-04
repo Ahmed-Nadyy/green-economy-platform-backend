@@ -26,7 +26,7 @@ const Crop = sequelize.define("Crop", {
   },
   imageUrl: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   season: {
     type: DataTypes.STRING,
