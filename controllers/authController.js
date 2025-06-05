@@ -133,18 +133,18 @@ const login = async (req, res) => {
 
     const admin = await Admin.findOne({ where: { email } });
     if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
+      return res.status(404).json({status:false , message: "Admin not found" });
     }
 
     if (!admin.isVerified) {
       return res
         .status(400)
-        .json({ message: "Please verify your account first" });
+        .json({status:false , message: "Please verify your account first" });
     }
 
     const isValidPassword = await bcrypt.compare(password, admin.password);
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ status:false ,message: "Invalid credentials" });
     }
 
     const otp = generateOTP();
@@ -152,16 +152,16 @@ const login = async (req, res) => {
     const emailSent = await sendOTPEmail(email, otp, "login");
 
     if (!emailSent) {
-      return res.status(500).json({ message: "Failed to send OTP email" });
+      return res.status(500).json({ status:false ,message: "Failed to send OTP email" });
     }
 
     admin.lastLoginAttempt = new Date();
     await admin.save();
 
-    res.json({ message: "OTP sent to your email" });
+    res.json({ status:true ,message: "OTP sent to your email" });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Login failed" });
+    res.status(500).json({ status:false ,message: "Login failed" });
   }
 };
 
@@ -172,12 +172,12 @@ const verifyLogin = async (req, res) => {
 
     const admin = await Admin.findOne({ where: { email } });
     if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
+      return res.status(404).json({ status:false ,message: "Admin not found" });
     }
 
     const isValid = await verifyOTP(email, otp, "login");
     if (!isValid) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+      return res.status(400).json({ status:false ,message: "Invalid or expired OTP" });
     }
 
     const token = jwt.sign(
@@ -189,7 +189,9 @@ const verifyLogin = async (req, res) => {
     res.json({
       message: "Login successful",
       token,
+      status:true ,
       admin: {
+        role:"admin",
         id: admin.id,
         fullName: admin.fullName,
         email: admin.email,
@@ -200,7 +202,7 @@ const verifyLogin = async (req, res) => {
     });
   } catch (error) {
     console.error("Login verification error:", error);
-    res.status(500).json({ message: "Login verification failed" });
+    res.status(500).json({status:false , message: "Login verification failed" });
   }
 };
 
@@ -211,7 +213,7 @@ const resendOTP = async (req, res) => {
 
     const admin = await Admin.findOne({ where: { email } });
     if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
+      return res.status(404).json({status:false , message: "Admin not found" });
     }
 
     const otp = generateOTP();
@@ -219,13 +221,13 @@ const resendOTP = async (req, res) => {
     const emailSent = await sendOTPEmail(email, otp, type);
 
     if (!emailSent) {
-      return res.status(500).json({ message: "Failed to send OTP email" });
+      return res.status(500).json({status:false , message: "Failed to send OTP email" });
     }
 
-    res.json({ message: "OTP resent successfully" });
+    res.json({status:true , message: "OTP resent successfully" });
   } catch (error) {
     console.error("Resend OTP error:", error);
-    res.status(500).json({ message: "Failed to resend OTP" });
+    res.status(500).json({status:false , message: "Failed to resend OTP" });
   }
 };
 

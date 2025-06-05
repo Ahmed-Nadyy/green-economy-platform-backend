@@ -6,6 +6,7 @@ const {
   getAdminById,
   updateAdmin,
   deleteAdmin,
+  addAdmin
 } = require("../controllers/adminController");
 
 // Configure multer for file upload
@@ -25,6 +26,7 @@ const upload = multer({
 });
 
 router.get("/", getAllAdmins);
+router.post("/", addAdmin);
 router.get("/:id", getAdminById);
 router.patch("/:id", upload.single("image"), updateAdmin);
 router.delete("/:id", deleteAdmin);

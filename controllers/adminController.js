@@ -7,7 +7,7 @@ const fs = require("fs");
 const getAllAdmins = async (req, res) => {
   try {
     const admins = await Admin.findAll({
-      attributes: ["id", "fullName", "email", "job"],
+      attributes: ["id", "fullName","phoneNumber", "email", "job"],
     });
     res.json(admins);
   } catch (error) {
@@ -161,9 +161,65 @@ const deleteAdmin = async (req, res) => {
   }
 };
 
+// add admin
+const addAdmin = async (req, res) => {
+  try {
+    const { fullName, email, password, job, phoneNumber } = req.body;
+
+    if (!fullName || !email || !password || !job || !phoneNumber) {
+      return res.status(400).json({
+        status: false,
+        message: "All fields are required"
+      });
+    }
+
+    // Validate phone number
+    const phoneRegex = /^(\+20|0)?1[0125][0-9]{8}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      return res.status(400).json({
+        message: "Please enter a valid Egyptian phone number",
+        details:
+          "Phone number should start with +20 or 0 followed by 1, 0, 1, 2, or 5 and 8 digits",
+      });
+    }
+
+    // Format phone number
+    const formattedPhone = phoneNumber.startsWith("+20")
+      ? phoneNumber
+      : phoneNumber.startsWith("0")
+      ? "+20" + phoneNumber.slice(1)
+      : "+20" + phoneNumber;
+
+    // Create admin
+    const adminData = new Admin({
+      fullName,
+      email,
+      job,
+      phoneNumber: formattedPhone,
+    });
+
+    adminData.password = await bcrypt.hash(password, 10);
+
+    await adminData.save();
+
+    return res.json({
+      status: true,
+      message: "Admin added successfully",
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      error: error.message,
+      message: "Failed to update admin"
+    });
+  }
+};
+
 module.exports = {
   getAllAdmins,
   getAdminById,
   updateAdmin,
   deleteAdmin,
+  addAdmin
 };
