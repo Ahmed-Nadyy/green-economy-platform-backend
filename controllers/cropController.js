@@ -26,21 +26,23 @@ const createCrop = async (req, res) => {
     const {
       name,
       arabicName,
+      arabicTitle,
+      title,
       type,
       arabicType,
       season,
-      arabicSeason,
       description,
       arabicDescription,
       growthPeriod,
-      arabicGrowthPeriod,
-      cultivation,
-      diseases,
-      economics,
-      environment,
-      fertilization,
-      irrigation,
-      locationSuitability,
+      // arabicName,
+      // arabicGrowthPeriod,
+      // cultivation,
+      // diseases,
+      // economics,
+      // environment,
+      // fertilization,
+      // irrigation,
+      // locationSuitability,
     } = req.body;
 
     let imageUrl = null;
@@ -49,54 +51,47 @@ const createCrop = async (req, res) => {
     }
 
     const result = await sequelize.transaction(async (t) => {
-      const relatedRecords = {};
+      // const relatedRecords = {};
 
-      if (cultivation) relatedRecords.cultivation = await Cultivation.create(cultivation, { transaction: t });
-      if (diseases) relatedRecords.diseases = await Diseases.create(diseases, { transaction: t });
-      if (economics) relatedRecords.economics = await Economics.create(economics, { transaction: t });
-      if (environment) relatedRecords.environment = await Environment.create(environment, { transaction: t });
-      if (fertilization) relatedRecords.fertilization = await Fertilization.create(fertilization, { transaction: t });
-      if (irrigation) relatedRecords.irrigation = await Irrigation.create(irrigation, { transaction: t });
-      if (locationSuitability) relatedRecords.locationSuitability = await LocationSuitability.create(locationSuitability, { transaction: t });
+      // if (cultivation) relatedRecords.cultivation = await Cultivation.create(cultivation, { transaction: t });
+      // if (diseases) relatedRecords.diseases = await Diseases.create(diseases, { transaction: t });
+      // if (economics) relatedRecords.economics = await Economics.create(economics, { transaction: t });
+      // if (environment) relatedRecords.environment = await Environment.create(environment, { transaction: t });
+      // if (fertilization) relatedRecords.fertilization = await Fertilization.create(fertilization, { transaction: t });
+      // if (irrigation) relatedRecords.irrigation = await Irrigation.create(irrigation, { transaction: t });
+      // if (locationSuitability) relatedRecords.locationSuitability = await LocationSuitability.create(locationSuitability, { transaction: t });
 
       const crop = await Crop.create({
-        name,
-        arabicName,
-        type,
-        arabicType,
-        imageUrl,
-        season,
-        arabicSeason,
-        description,
-        arabicDescription,
-        growthPeriod,
-        arabicGrowthPeriod,
-        cultivationId: relatedRecords.cultivation?.id,
-        diseasesId: relatedRecords.diseases?.id,
-        economicsId: relatedRecords.economics?.id,
-        environmentId: relatedRecords.environment?.id,
-        fertilizationId: relatedRecords.fertilization?.id,
-        irrigationId: relatedRecords.irrigation?.id,
-        locationSuitabilityId: relatedRecords.locationSuitability?.id,
+      name,
+      arabicName,
+      arabicTitle,
+      title,
+      type,
+      arabicType,
+      season,
+      description,
+      arabicDescription,
+      growthPeriod,
+      imageUrl
       }, { transaction: t });
 
-      const completeCrop = await Crop.findByPk(crop.id, {
-        include: [
-          { model: Cultivation, as: 'cultivation', required: false },
-          { model: Diseases, as: 'diseases', required: false },
-          { model: Economics, as: 'economics', required: false },
-          { model: Environment, as: 'environment', required: false },
-          { model: Fertilization, as: 'fertilization', required: false },
-          { model: Irrigation, as: 'irrigation', required: false },
-          { model: LocationSuitability, as: 'locationSuitability', required: false },
-        ],
-        transaction: t,
-      });
+      // const completeCrop = await Crop.findByPk(crop.id, {
+      //   include: [
+      //     { model: Cultivation, as: 'cultivation', required: false },
+      //     { model: Diseases, as: 'diseases', required: false },
+      //     { model: Economics, as: 'economics', required: false },
+      //     { model: Environment, as: 'environment', required: false },
+      //     { model: Fertilization, as: 'fertilization', required: false },
+      //     { model: Irrigation, as: 'irrigation', required: false },
+      //     { model: LocationSuitability, as: 'locationSuitability', required: false },
+      //   ],
+      //   transaction: t,
+      // });
 
-      return completeCrop;
+      return crop;
     });
 
-    res.status(201).json(result);
+    res.status(201).json({status:true ,data:result, message: "create crop successful"});
   } catch (error) {
     if (req.file) {
       deleteImageFile(`/uploads/crop/${req.file.filename}`);
@@ -112,34 +107,36 @@ const updateCrop = async (req, res) => {
     const {
       name,
       arabicName,
+      arabicTitle,
+      title,
       type,
       arabicType,
       season,
-      arabicSeason,
       description,
       arabicDescription,
       growthPeriod,
-      arabicGrowthPeriod,
-      cultivation,
-      diseases,
-      economics,
-      environment,
-      fertilization,
-      irrigation,
-      locationSuitability,
+      // arabicName,
+      // arabicGrowthPeriod,
+      // cultivation,
+      // diseases,
+      // economics,
+      // environment,
+      // fertilization,
+      // irrigation,
+      // locationSuitability,
     } = req.body;
 
     const result = await sequelize.transaction(async (t) => {
       const crop = await Crop.findByPk(cropId, {
-        include: [
-          { model: Cultivation, as: 'cultivation' },
-          { model: Diseases, as: 'diseases' },
-          { model: Economics, as: 'economics' },
-          { model: Environment, as: 'environment' },
-          { model: Fertilization, as: 'fertilization' },
-          { model: Irrigation, as: 'irrigation' },
-          { model: LocationSuitability, as: 'locationSuitability' },
-        ],
+        // include: [
+        //   { model: Cultivation, as: 'cultivation' },
+        //   { model: Diseases, as: 'diseases' },
+        //   { model: Economics, as: 'economics' },
+        //   { model: Environment, as: 'environment' },
+        //   { model: Fertilization, as: 'fertilization' },
+        //   { model: Irrigation, as: 'irrigation' },
+        //   { model: LocationSuitability, as: 'locationSuitability' },
+        // ],
         transaction: t,
       });
 
@@ -152,94 +149,92 @@ const updateCrop = async (req, res) => {
 
       const updates = {};
 
-      if (cultivation) {
-        if (crop.cultivationId) {
-          await Cultivation.destroy({ where: { id: crop.cultivationId }, transaction: t });
-        }
-        const newCultivation = await Cultivation.create(cultivation, { transaction: t });
-        updates.cultivationId = newCultivation.id;
-      }
+      // if (cultivation) {
+      //   if (crop.cultivationId) {
+      //     await Cultivation.destroy({ where: { id: crop.cultivationId }, transaction: t });
+      //   }
+      //   const newCultivation = await Cultivation.create(cultivation, { transaction: t });
+      //   updates.cultivationId = newCultivation.id;
+      // }
 
-      if (diseases) {
-        if (crop.diseasesId) {
-          await Diseases.destroy({ where: { id: crop.diseasesId }, transaction: t });
-        }
-        const newDiseases = await Diseases.create(diseases, { transaction: t });
-        updates.diseasesId = newDiseases.id;
-      }
+      // if (diseases) {
+      //   if (crop.diseasesId) {
+      //     await Diseases.destroy({ where: { id: crop.diseasesId }, transaction: t });
+      //   }
+      //   const newDiseases = await Diseases.create(diseases, { transaction: t });
+      //   updates.diseasesId = newDiseases.id;
+      // }
 
-      if (economics) {
-        if (crop.economicsId) {
-          await Economics.destroy({ where: { id: crop.economicsId }, transaction: t });
-        }
-        const newEconomics = await Economics.create(economics, { transaction: t });
-        updates.economicsId = newEconomics.id;
-      }
+      // if (economics) {
+      //   if (crop.economicsId) {
+      //     await Economics.destroy({ where: { id: crop.economicsId }, transaction: t });
+      //   }
+      //   const newEconomics = await Economics.create(economics, { transaction: t });
+      //   updates.economicsId = newEconomics.id;
+      // }
 
-      if (environment) {
-        if (crop.environmentId) {
-          await Environment.destroy({ where: { id: crop.environmentId }, transaction: t });
-        }
-        const newEnvironment = await Environment.create(environment, { transaction: t });
-        updates.environmentId = newEnvironment.id;
-      }
+      // if (environment) {
+      //   if (crop.environmentId) {
+      //     await Environment.destroy({ where: { id: crop.environmentId }, transaction: t });
+      //   }
+      //   const newEnvironment = await Environment.create(environment, { transaction: t });
+      //   updates.environmentId = newEnvironment.id;
+      // }
 
-      if (fertilization) {
-        if (crop.fertilizationId) {
-          await Fertilization.destroy({ where: { id: crop.fertilizationId }, transaction: t });
-        }
-        const newFertilization = await Fertilization.create(fertilization, { transaction: t });
-        updates.fertilizationId = newFertilization.id;
-      }
+      // if (fertilization) {
+      //   if (crop.fertilizationId) {
+      //     await Fertilization.destroy({ where: { id: crop.fertilizationId }, transaction: t });
+      //   }
+      //   const newFertilization = await Fertilization.create(fertilization, { transaction: t });
+      //   updates.fertilizationId = newFertilization.id;
+      // }
 
-      if (irrigation) {
-        if (crop.irrigationId) {
-          await Irrigation.destroy({ where: { id: crop.irrigationId }, transaction: t });
-        }
-        const newIrrigation = await Irrigation.create(irrigation, { transaction: t });
-        updates.irrigationId = newIrrigation.id;
-      }
+      // if (irrigation) {
+      //   if (crop.irrigationId) {
+      //     await Irrigation.destroy({ where: { id: crop.irrigationId }, transaction: t });
+      //   }
+      //   const newIrrigation = await Irrigation.create(irrigation, { transaction: t });
+      //   updates.irrigationId = newIrrigation.id;
+      // }
 
-      if (locationSuitability) {
-        if (crop.locationSuitabilityId) {
-          await LocationSuitability.destroy({ where: { id: crop.locationSuitabilityId }, transaction: t });
-        }
-        const newLocation = await LocationSuitability.create(locationSuitability, { transaction: t });
-        updates.locationSuitabilityId = newLocation.id;
-      }
+      // if (locationSuitability) {
+      //   if (crop.locationSuitabilityId) {
+      //     await LocationSuitability.destroy({ where: { id: crop.locationSuitabilityId }, transaction: t });
+      //   }
+      //   const newLocation = await LocationSuitability.create(locationSuitability, { transaction: t });
+      //   updates.locationSuitabilityId = newLocation.id;
+      // }
 
       await crop.update({
-        name,
-        arabicName,
-        type,
-        arabicType,
-        season,
-        arabicSeason,
-        description,
-        arabicDescription,
-        growthPeriod,
-        arabicGrowthPeriod,
+      name,
+      arabicName,
+      arabicTitle,
+      title,
+      type,
+      arabicType,
+      season,
+      description,
+      arabicDescription,
+      growthPeriod,
         imageUrl: crop.imageUrl,
-        ...updates,
       }, { transaction: t });
 
       const updatedCrop = await Crop.findByPk(cropId, {
-        include: [
-          { model: Cultivation, as: 'cultivation', required: false },
-          { model: Diseases, as: 'diseases', required: false },
-          { model: Economics, as: 'economics', required: false },
-          { model: Environment, as: 'environment', required: false },
-          { model: Fertilization, as: 'fertilization', required: false },
-          { model: Irrigation, as: 'irrigation', required: false },
-          { model: LocationSuitability, as: 'locationSuitability', required: false },
-        ],
+        // include: [
+        //   { model: Cultivation, as: 'cultivation', required: false },
+        //   { model: Diseases, as: 'diseases', required: false },
+        //   { model: Economics, as: 'economics', required: false },
+        //   { model: Environment, as: 'environment', required: false },
+        //   { model: Fertilization, as: 'fertilization', required: false },
+        //   { model: Irrigation, as: 'irrigation', required: false },
+        //   { model: LocationSuitability, as: 'locationSuitability', required: false },
+        // ],
         transaction: t,
       });
 
       return updatedCrop;
     });
-
-    res.json(result);
+    res.status(201).json({status:true ,data:result, message: "update crop successful"});
   } catch (error) {
     if (req.file) {
       deleteImageFile(`/uploads/crop/${req.file.filename}`);

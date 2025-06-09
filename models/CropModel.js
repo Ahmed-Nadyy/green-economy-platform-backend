@@ -20,7 +20,11 @@ const Crop = sequelize.define("Crop", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  arabicType: {
+  arabicTitle: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -29,10 +33,6 @@ const Crop = sequelize.define("Crop", {
     allowNull: true,
   },
   season: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  arabicSeason: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -47,11 +47,7 @@ const Crop = sequelize.define("Crop", {
   growthPeriod: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  arabicGrowthPeriod: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+  }
 });
 
 module.exports = Crop;
