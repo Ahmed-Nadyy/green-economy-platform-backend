@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const { protected } = require("../middlewares/auth.middleware");
 const {
   getAllAdmins,
   getAdminById,
   updateAdmin,
   deleteAdmin,
-  addAdmin
+  addAdmin,
 } = require("../controllers/adminController");
 
 // Configure multer for file upload
@@ -24,6 +25,8 @@ const upload = multer({
     }
   },
 });
+
+router.use(protected);
 
 router.get("/", getAllAdmins);
 router.post("/", addAdmin);
