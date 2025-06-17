@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const getAllJobRequests = async (req, res) => {
   try {
     const jobRequests = await JobRequest.findAll({
-      attributes: ["id", "fullName", "email", "role", "phoneNumber"],
+      // attributes: ["id", "fullName", "email", "role", "phoneNumber"],
     });
     res.json(jobRequests);
   } catch (error) {

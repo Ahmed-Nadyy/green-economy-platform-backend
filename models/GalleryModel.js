@@ -16,6 +16,10 @@ const Gallery = sequelize.define("Gallery", {
     type: DataTypes.ENUM("image", "video"),
     allowNull: false,
   },
+  thumbnail: {
+  type: DataTypes.STRING,
+  allowNull: true,
+}
 });
 
 module.exports = Gallery;

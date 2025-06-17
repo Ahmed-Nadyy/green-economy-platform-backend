@@ -37,11 +37,13 @@ const getAdminById = async (req, res) => {
 
 // Update admin data
 const updateAdmin = async (req, res) => {
-  let imagePath = null;
+  // let imagePath = null;
   try {
     const { id } = req.params;
+    console.log(req.body);
+    
     const { fullName, email, password, job, phoneNumber } = req.body;
-    const imageFile = req.file;
+    // const imageFile = req.file;
 
     const admin = await Admin.findByPk(id);
     if (!admin) {
@@ -72,9 +74,9 @@ const updateAdmin = async (req, res) => {
         email: email || admin.email,
         job: job || admin.job,
         phoneNumber: formattedPhone,
-        imageUrl: imagePath
-          ? `/uploads/${path.basename(imagePath)}`
-          : admin.imageUrl,
+        // imageUrl: imagePath
+        //   ? `/uploads/${path.basename(imagePath)}`
+        //   : admin.imageUrl,
       };
 
       // Update password if provided
@@ -85,27 +87,28 @@ const updateAdmin = async (req, res) => {
       await admin.update(updateData);
     }
 
-    // Handle image upload if new image is provided
-    if (imageFile) {
-      // Delete old image if exists
-      if (admin.imageUrl) {
-        const oldImagePath = path.join(__dirname, "..", admin.imageUrl);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
-      }
+    // // Handle image upload if new image is provided
+    // if (imageFile) {
+    //   // Delete old image if exists
+    //   if (admin.imageUrl) {
+    //     const oldImagePath = path.join(__dirname, "..", admin.imageUrl);
+    //     if (fs.existsSync(oldImagePath)) {
+    //       fs.unlinkSync(oldImagePath);
+    //     }
+    //   }
 
-      // Save new image
-      const uploadDir = path.join(__dirname, "../uploads");
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      const fileName = `${Date.now()}-${imageFile.originalname}`;
-      imagePath = path.join(uploadDir, fileName);
-      fs.writeFileSync(imagePath, imageFile.buffer);
-    }
+    //   // Save new image
+    //   const uploadDir = path.join(__dirname, "../uploads");
+    //   if (!fs.existsSync(uploadDir)) {
+    //     fs.mkdirSync(uploadDir, { recursive: true });
+    //   }
+    //   const fileName = `${Date.now()}-${imageFile.originalname}`;
+    //   imagePath = path.join(uploadDir, fileName);
+    //   fs.writeFileSync(imagePath, imageFile.buffer);
+    // }
 
     res.json({
+      status: true,
       message: "Admin updated successfully",
       admin: {
         id: admin.id,

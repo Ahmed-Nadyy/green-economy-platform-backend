@@ -1,7 +1,7 @@
 const Gallery = require("../models/GalleryModel");
 const fs = require("fs").promises;
 const path = require("path");
-
+const ffmpeg = require("fluent-ffmpeg");
 // Helper function to validate file type
 const validateFileType = (file, expectedType) => {
   const imageTypes = ["image/jpeg", "image/png", "image/gif"];

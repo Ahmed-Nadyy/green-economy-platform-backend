@@ -65,8 +65,8 @@ const updateArticle = async (req, res) => {
 const getArticlesBySubType = async (req, res) => {
   try {
     const articles = await Article.findAll({
-      where: { subType: req.params.subType },
-      attributes: ["id", "type", "imageUrl", "title", "arabicTitle"],
+      where: { type: req.params.subType },
+      // attributes: ["id", "type", "imageUrl", "title", "arabicTitle"],
     });
     res.json(articles);
   } catch (error) {

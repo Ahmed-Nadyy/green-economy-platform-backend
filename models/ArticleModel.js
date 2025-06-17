@@ -12,10 +12,6 @@ const Article = sequelize.define("Article", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  subType: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true,
