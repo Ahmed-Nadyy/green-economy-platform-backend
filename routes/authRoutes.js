@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const { protected } = require("../middlewares/auth.middleware");
+
 const {
   register,
   verifyRegistration,
@@ -21,7 +23,7 @@ const upload = multer({
   },
 });
 
-router.post("/register", upload.single("image"), register);
+router.post("/register", protected, upload.single("image"), register);
 router.post("/verify-account", verifyRegistration);
 router.post("/login", login);
 router.post("/verify-login", verifyLogin);

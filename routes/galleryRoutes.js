@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { protected } = require("../middlewares/auth.middleware");
 const {
   createGalleryItem,
   getAllGalleryItems,
@@ -56,8 +57,8 @@ const upload = multer({
 });
 
 // Gallery routes
-router.post("/", upload.single("file"), createGalleryItem);
+router.post("/", protected, upload.single("file"), createGalleryItem);
 router.get("/", getAllGalleryItems);
-router.delete("/:id", deleteGalleryItem);
+router.delete("/:id", protected, deleteGalleryItem);
 
 module.exports = router;
