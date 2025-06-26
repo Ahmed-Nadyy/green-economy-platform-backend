@@ -12,6 +12,9 @@ const sequelize = new Sequelize(
     define: {
       timestamps: true,
     },
+    dialectOptions: {
+      connectTimeout: 10000, // 10 ثواني مهلة الاتصال
+    },
   }
 );
 
