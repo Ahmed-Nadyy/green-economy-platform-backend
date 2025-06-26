@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { protected } = require("../middlewares/auth.middleware");
 
 const {
   createCrop,
@@ -42,14 +43,14 @@ const upload = multer({
   }
 });
 
-router.post("/", upload.single("image"), createCrop);
+router.post("/", protected, upload.single("image"), createCrop);
 
-router.patch("/:id", upload.single("image"), updateCrop);
+router.patch("/:id", protected, upload.single("image"), updateCrop);
 
 router.get("/:id", getCropById);
 
 router.get("/", getAllCrops);
 
-router.delete("/:id", deleteCrop);
+router.delete("/:id", protected, deleteCrop);
 
 module.exports = router;
