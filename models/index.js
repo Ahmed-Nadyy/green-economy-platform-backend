@@ -10,6 +10,9 @@ const Environment = require("./EnvironmentModel");
 const Fertilization = require("./FertilizationModel");
 const Irrigation = require("./IrrigationModel");
 const LocationSuitability = require("./LocationSuitabilityModel");
+const Partner = require("./PartnerModel");
+const Media = require("./MediaModel");
+const Background = require("./BackgroundModel");
 
 // Crop belongsTo Cultivation (Crop has cultivationId)
 Crop.belongsTo(Cultivation, { 
@@ -88,4 +91,7 @@ module.exports = {
   Diseases,
   Fertilization,
   LocationSuitability,
+  Partner,
+  Media,
+  Background, 
 };

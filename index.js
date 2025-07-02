@@ -44,6 +44,14 @@ app.use("/api/v1/crops", cropRoutes);
 const articleRoutes = require("./routes/articleRoutes");
 app.use("/api/v1/articles", articleRoutes);
 
+//Partner routes
+const partnerRoutes = require("./routes/partnerRoutes");
+app.use("/api/v1/partners", partnerRoutes);
+
+//Other routes
+const otherRoutes = require("./routes/otherRoutes");
+app.use("/api/v1/other", otherRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
