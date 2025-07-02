@@ -1,21 +1,17 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const Background = sequelize.define("Crop", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+const Background = sequelize.define('Background', {
+  section: {
+    type: DataTypes.ENUM('platform', 'institutionWord', 'gallery'),
     allowNull: false,
-    primaryKey: true,
   },
-  imgUrl: {
+  url: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  type: {
-    type: DataTypes.ENUM,
-    allowNull: false,
   }
- });
+}, {
+  timestamps: true,
+});
 
 module.exports = Background;

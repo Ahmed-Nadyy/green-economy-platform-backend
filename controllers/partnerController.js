@@ -10,7 +10,6 @@ const deleteImageFile = (imageUrl) => {
     }
   }
 };
-
 // Create new Partner
 const createPartner = async (req, res) => {
   try {
@@ -31,34 +30,6 @@ const createPartner = async (req, res) => {
   }
 };
 
-// update Partner
-const updatePartner = async (req, res) => {
-  try {
-    const partner = await Partner.findByPk(req.params.id);
-    if (!partner) {
-      return res.status(404).json({ message: "Partner not found" });
-    }
-
-    const updateData = { ...req.body };
-
-    // Handle image upload
-    if (req.file) {
-      // Delete old image if it exists
-      deleteImageFile(partner.imageUrl);
-      updateData.imageUrl = `/uploads/partner/${req.file.filename}`;
-    }
-
-    await partner.update(updateData);
-    res.json(partner);
-  } catch (error) {
-    // If update fails, delete the newly uploaded image
-    if (req.file) {
-      deleteImageFile(`/uploads/partner/${req.file.filename}`);
-    }
-    res.status(400).json({ message: error.message });
-  }
-};
-
 // Get articles by subType with specific fields
 const getAllPartners = async (req, res) => {
   try {
@@ -67,19 +38,6 @@ const getAllPartners = async (req, res) => {
   } catch (error) {
     console.error("Error fetching Partners:", error);
     res.status(500).json({ message: "Failed to fetch Partners" });
-  }
-};
-
-// Get article by ID with all data
-const getPartnerById = async (req, res) => {
-  try {
-    const partner = await Partner.findByPk(req.params.id);
-    if (!partner) {
-      return res.status(404).json({ message: "Partner not found" });
-    }
-    res.json(partner);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
   }
 };
 
@@ -103,8 +61,6 @@ const deletePartner = async (req, res) => {
 
 module.exports = {
   createPartner,
-  updatePartner,
   getAllPartners,
-  getPartnerById,
   deletePartner,
 };

@@ -49,8 +49,16 @@ const partnerRoutes = require("./routes/partnerRoutes");
 app.use("/api/v1/partners", partnerRoutes);
 
 //Other routes
-const otherRoutes = require("./routes/otherRoutes");
-app.use("/api/v1/other", otherRoutes);
+const mediaRoutes = require("./routes/mediaRoutes");
+app.use("/api/v1/other", mediaRoutes);
+
+//backgrounds routes
+const backgroundsRoutes = require('./routes/backgroundsRoutes');
+app.use('/api/v1/backgrounds', backgroundsRoutes);
+
+//members routes
+const membersRoutes = require('./routes/membersRoutes');
+app.use('/api/v1/members', membersRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

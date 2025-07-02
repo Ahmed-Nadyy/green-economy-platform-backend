@@ -53,7 +53,7 @@ const getMediaItems = async (req, res) => {
 // Update MediaItems
 const updateMediaItems = async (req, res) => {
   try {
-    const MediaItems = await Media.findByPk(req.params.id);
+    const MediaItems = await Media.findByPk(1);
     if (!MediaItems) {
       return res.status(404).json({ message: "MediaItems not found" });
     }

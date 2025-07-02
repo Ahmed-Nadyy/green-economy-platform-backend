@@ -1,37 +1,29 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Media = sequelize.define("Media", {
+const Member = sequelize.define("Member", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
-  facebookLink: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  youtubeLink: {
+  job: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  tiktokLink: {
+  description: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  whatsappLink: {
+  imageUrl: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  phoneNumber: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
+  }  
 });
 
-module.exports = Media;
+module.exports = Member;

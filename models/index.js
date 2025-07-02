@@ -13,7 +13,7 @@ const LocationSuitability = require("./LocationSuitabilityModel");
 const Partner = require("./PartnerModel");
 const Media = require("./MediaModel");
 const Background = require("./BackgroundModel");
-
+const SectionSelection = require("./SectionSelectionModel");
 // Crop belongsTo Cultivation (Crop has cultivationId)
 Crop.belongsTo(Cultivation, { 
   foreignKey: 'cultivationId',
@@ -94,4 +94,5 @@ module.exports = {
   Partner,
   Media,
   Background, 
+  SectionSelection
 };
