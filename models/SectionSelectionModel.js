@@ -4,7 +4,7 @@ const Background = require('./BackgroundModel');
 
 const SectionSelection = sequelize.define('SectionSelection', {
   section: {
-    type: DataTypes.ENUM('platform', 'institutionWord', 'gallery'),
+    type: DataTypes.ENUM('platform','institutionWord','goles','gallery','aboutUs','ourServices','askanExpert','careerOpportunities','contactUs' ),
     allowNull: false,
     unique: true,
   },

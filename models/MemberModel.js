@@ -12,15 +12,15 @@ const Member = sequelize.define("Member", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  job: {
+  role: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
+  bio: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  imageUrl: {
+  image: {
     type: DataTypes.STRING,
     allowNull: false,
   }  

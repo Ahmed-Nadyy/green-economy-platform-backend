@@ -50,7 +50,7 @@ app.use("/api/v1/partners", partnerRoutes);
 
 //Other routes
 const mediaRoutes = require("./routes/mediaRoutes");
-app.use("/api/v1/other", mediaRoutes);
+app.use("/api/v1/media", mediaRoutes);
 
 //backgrounds routes
 const backgroundsRoutes = require('./routes/backgroundsRoutes');

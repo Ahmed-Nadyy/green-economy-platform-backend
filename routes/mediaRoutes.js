@@ -5,7 +5,7 @@ const { protected } = require("../middlewares/auth.middleware");
 const {
   updateMediaItems,
   getMediaItems,
-} = require("../controllers/otherController");
+} = require("../controllers/mediaController");
 
 router.patch("/", protected, updateMediaItems);
 router.get("/", getMediaItems);

@@ -1,6 +1,6 @@
 const Member = require('../models/MemberModel');
 
-exports.getAllMember = async (req, res) => {
+const getAllMember = async (req, res) => {
   try {
     const members = await Member.findAll();
     res.status(200).json(members);
@@ -10,20 +10,20 @@ exports.getAllMember = async (req, res) => {
   }
 };
 
-exports.createMember = async (req, res) => {
+const createMember = async (req, res) => {
   try {
-    const { name, job, description } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    const { name, role, bio } = req.body;
+    const image = req.file ? `/uploads/members/${req.file.filename}` : null;
 
-    if (!name || !job || !description || !imageUrl) {
+    if (!name || !role || !bio || !image) {
       return res.status(400).json({ message: 'كل الحقول مطلوبة' });
     }
 
     const newMember = await Member.create({
       name,
-      job,
-      description,
-      imageUrl,
+      role,
+      bio,
+      image,
     });
 
     res.status(201).json(newMember);
@@ -33,7 +33,7 @@ exports.createMember = async (req, res) => {
   }
 };
 
-exports.deleteMember = async (req, res) => {
+const deleteMember = async (req, res) => {
   try {
     const { id } = req.params;
     const member = await Member.findByPk(id);
@@ -48,4 +48,11 @@ exports.deleteMember = async (req, res) => {
     console.error("Error deleting member:", error);
     res.status(500).json({ message: 'خطأ في حذف العضو' });
   }
+};
+
+
+module.exports = {
+  getAllMember,
+  createMember,
+  deleteMember,
 };

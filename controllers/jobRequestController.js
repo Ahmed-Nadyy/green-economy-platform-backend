@@ -97,8 +97,26 @@ const createJobRequest = async (req, res) => {
   }
 };
 
+const deleteJobRequest = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const jobRequest = await JobRequest.findByPk(id);
+
+    if (!jobRequest) {
+      return res.status(404).json({ message: "الطلب غير موجود" });
+    }
+
+    await jobRequest.destroy();
+    res.status(200).json({ message: "تم حذف الطلب بنجاح" });
+  } catch (error) {
+    console.error("Error deleting job request:", error);
+    res.status(500).json({ message: "حدث خطأ أثناء حذف الطلب" });
+  }
+};
 module.exports = {
   getAllJobRequests,
   getJobRequestById,
   createJobRequest,
+  deleteJobRequest
 };

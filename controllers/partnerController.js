@@ -14,10 +14,9 @@ const deleteImageFile = (imageUrl) => {
 const createPartner = async (req, res) => {
   try {
     const PartnerData = { ...req.body };
-
     // Handle image upload
     if (req.file) {
-      PartnerData.imageUrl = `/uploads/partner/${req.file.filename}`;
+      PartnerData.logo = `/uploads/partner/${req.file.filename}`;
     }
 
     const partner = await Partner.create(PartnerData);

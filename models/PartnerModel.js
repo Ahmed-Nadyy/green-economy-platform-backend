@@ -12,7 +12,7 @@ const Partner = sequelize.define("Partner", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  imageUrl: {
+  logo: {
     type: DataTypes.STRING,
     allowNull: true,
   },
@@ -21,5 +21,6 @@ const Partner = sequelize.define("Partner", {
     allowNull: true,
   }
 });
+
 
 module.exports = Partner;

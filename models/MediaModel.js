@@ -32,6 +32,10 @@ const Media = sequelize.define("Media", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  }
 });
 
 module.exports = Media;
